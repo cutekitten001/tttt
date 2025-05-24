@@ -1,0 +1,53 @@
+<div class="login-container">
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>Login TLV BOV</mat-card-title>
+      <mat-card-subtitle>Acesso ao sistema</mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+      <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+        <!-- Campo Email -->
+        <mat-form-field appearance="outline">
+          <mat-label>Email Corporativo</mat-label>
+          <input matInput formControlName="email" type="email" placeholder="seu.email@tahto.com.br" required>
+          <mat-error *ngIf="loginForm.get('email')?.hasError('required')">
+            Email é obrigatório.
+          </mat-error>
+          <mat-error *ngIf="loginForm.get('email')?.hasError('email')">
+            Formato de email inválido.
+          </mat-error>
+        </mat-form-field>
+
+        <!-- Campo Senha -->
+        <mat-form-field appearance="outline">
+          <mat-label>Senha</mat-label>
+          <input matInput formControlName="password" type="password" required>
+          <mat-error *ngIf="loginForm.get('password')?.hasError('required')">
+            Senha é obrigatória.
+          </mat-error>
+        </mat-form-field>
+
+        <!-- Mensagem de Erro -->
+        <p class="error-message" *ngIf="errorMessage">
+          {{ errorMessage }}
+        </p>
+
+        <!-- Botão de Login e Spinner -->
+        <div class="button-container">
+          <button mat-raised-button color="primary" type="submit" [disabled]="loginForm.invalid || isLoading">
+            <span *ngIf="!isLoading">Entrar</span>
+            <mat-spinner *ngIf="isLoading" diameter="24"></mat-spinner>
+          </button>
+        </div>
+      </form>
+
+      <!-- Links Adicionais -->
+      <div class="additional-links">
+        <a routerLink="/register">Não tem conta? Cadastre-se</a>
+        <a routerLink="/forgot-password">Esqueceu a senha?</a>
+      </div>
+
+    </mat-card-content>
+  </mat-card>
+</div>
+

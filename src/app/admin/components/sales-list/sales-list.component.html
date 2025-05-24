@@ -1,0 +1,158 @@
+<div class="sales-list-container">
+  <h2>Vendas da Equipe</h2>
+
+  <!-- Formulário de Filtros -->
+  <mat-card class="filters-card mat-elevation-z4">
+    <mat-card-content>
+      <form [formGroup]="filterForm">
+        <div class="filter-row">
+          <!-- Filtro por Status -->
+          <mat-form-field appearance="outline">
+            <mat-label>Status</mat-label>
+            <mat-select formControlName="status">
+              <mat-option [value]="null">Todos</mat-option>
+              <mat-option *ngFor="let status of statusOptions" [value]="status">
+                {{ status }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <!-- Filtro por Tipo de Venda -->
+          <mat-form-field appearance="outline">
+            <mat-label>Tipo de Venda</mat-label>
+            <mat-select formControlName="tipo">
+              <mat-option [value]="null">Todos</mat-option>
+              <mat-option *ngFor="let tipo of tipoVendaOptions" [value]="tipo">
+                {{ tipo }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <!-- Filtro por Agente -->
+          <mat-form-field appearance="outline">
+            <mat-label>Agente</mat-label>
+            <mat-select formControlName="agente">
+              <mat-option [value]="null">Todos</mat-option>
+              <mat-option *ngFor="let agent of agents$ | async" [value]="agent.id"> <!-- Usa agent.id que é o UID -->
+                {{ agent.nome }} ({{ agent.th }})
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+
+        <div class="filter-row">
+          <!-- Filtro por Data de Venda (Início) -->
+          <mat-form-field appearance="outline">
+            <mat-label>Data Venda (Início)</mat-label>
+            <input matInput [matDatepicker]="pickerInicio" formControlName="dataInicio" readonly>
+            <mat-datepicker-toggle matSuffix [for]="pickerInicio"></mat-datepicker-toggle>
+            <mat-datepicker #pickerInicio></mat-datepicker>
+          </mat-form-field>
+
+          <!-- Filtro por Data de Venda (Fim) -->
+          <mat-form-field appearance="outline">
+            <mat-label>Data Venda (Fim)</mat-label>
+            <input matInput [matDatepicker]="pickerFim" formControlName="dataFim" readonly>
+            <mat-datepicker-toggle matSuffix [for]="pickerFim"></mat-datepicker-toggle>
+            <mat-datepicker #pickerFim></mat-datepicker>
+          </mat-form-field>
+
+          <!-- Botão Limpar Filtros -->
+          <button mat-stroked-button (click)="clearFilters()" type="button" class="clear-button">
+            <mat-icon>clear</mat-icon> Limpar Filtros
+          </button>
+        </div>
+      </form>
+    </mat-card-content>
+  </mat-card>
+
+  <!-- Tabela de Vendas -->
+  <div class="table-container mat-elevation-z8">
+
+    <ng-container *ngIf="(filteredSales$ | async) as sales">
+
+
+
+      <table mat-table [dataSource]="sales">
+
+        <!-- Coluna Ticket -->
+        <ng-container matColumnDef="ticket">
+          <th mat-header-cell *matHeaderCellDef> Ticket </th>
+          <td mat-cell *matCellDef="let venda"> {{venda.ticket}} </td>
+        </ng-container>
+
+        <!-- Coluna Nome do Agente -->
+        <ng-container matColumnDef="agenteNome">
+          <th mat-header-cell *matHeaderCellDef> Agente </th>
+          <td mat-cell *matCellDef="let venda"> {{venda.agenteNome}} ({{venda.agenteTh}}) </td>
+        </ng-container>
+
+        <!-- Coluna CPF/CNPJ -->
+        <ng-container matColumnDef="cpfCnpj">
+          <th mat-header-cell *matHeaderCellDef> CPF/CNPJ </th>
+          <td mat-cell *matCellDef="let venda"> {{venda.cpfCnpj}} </td> <!-- Adicionar máscara se necessário -->
+        </ng-container>
+
+        <!-- Coluna Data da Venda -->
+        <ng-container matColumnDef="dataVenda">
+          <th mat-header-cell *matHeaderCellDef> Data Venda </th>
+          <td mat-cell *matCellDef="let venda"> {{venda.dataVenda.toDate() | date:'dd/MM/yyyy'}} </td>
+        </ng-container>
+
+        <!-- Coluna Tipo de Venda -->
+        <ng-container matColumnDef="tipoVenda">
+          <th mat-header-cell *matHeaderCellDef> Tipo </th>
+          <td mat-cell *matCellDef="let venda"> {{venda.tipoVenda}} </td>
+        </ng-container>
+
+        <!-- Coluna Velocidade -->
+        <ng-container matColumnDef="velocidade">
+          <th mat-header-cell *matHeaderCellDef> Velocidade </th>
+          <td mat-cell *matCellDef="let venda"> {{venda.velocidade}} </td>
+        </ng-container>
+
+        <!-- Coluna Status -->
+        <ng-container matColumnDef="status">
+          <th mat-header-cell *matHeaderCellDef> Status </th>
+          <td mat-cell *matCellDef="let venda">
+            <span [ngClass]="{
+              'status-aprovisionamento': venda.status === 'Em Aprovisionamento',
+              'status-pendencia': venda.status === 'Pendência',
+              'status-instalada': venda.status === 'Instalada',
+              'status-cancelada': venda.status === 'Cancelada'
+            }">
+              {{ venda.status }}
+            </span>
+          </td>
+        </ng-container>
+
+        <!-- Coluna Ações (Exemplo: Visualizar) -->
+        <ng-container matColumnDef="acoes">
+          <th mat-header-cell *matHeaderCellDef> Ações </th>
+          <td mat-cell *matCellDef="let venda">
+            <button mat-icon-button color="primary" (click)="viewDetails(venda)" matTooltip="Visualizar Detalhes">
+              <mat-icon>visibility</mat-icon>
+            </button>
+            <!-- Adicionar botões de editar/excluir se necessário para admin -->
+          </td>
+        </ng-container>
+
+        <!-- Definição das Linhas -->
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+        <!-- Mensagem caso não haja dados -->
+        <tr class="mat-row" *matNoDataRow>
+          <td class="mat-cell" [attr.colspan]="displayedColumns.length">
+            Nenhuma venda encontrada com os filtros aplicados ou aguardando carregamento...
+          </td>
+        </tr>
+      </table>
+    </ng-container>
+  </div>
+
+  <!-- Indicador de Carregamento Geral (Opcional) -->
+  <div *ngIf="!(filteredSales$ | async)" class="loading-shade">
+    <mat-spinner></mat-spinner>
+  </div>
+</div>

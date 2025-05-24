@@ -1,0 +1,160 @@
+<div class="sales-form-container">
+  <h3>Cadastrar Nova Venda</h3>
+  <form [formGroup]="salesForm" (ngSubmit)="onSubmit()">
+    <div class="form-grid">
+      <!-- Coluna 1 -->
+      <div class="form-column">
+        <!-- CPF/CNPJ -->
+        <mat-form-field appearance="outline">
+          <mat-label>CPF/CNPJ do Cliente</mat-label>
+          <input matInput formControlName="cpfCnpj" required>
+          <!-- Adicionar máscara se a lib for instalada -->
+          <!-- <input matInput formControlName="cpfCnpj" required mask="000.000.000-00||00.000.000/0000-00"> -->
+          <mat-error *ngIf="salesForm.get('cpfCnpj')?.hasError('required')">
+            CPF/CNPJ é obrigatório.
+          </mat-error>
+        </mat-form-field>
+
+        <!-- Telefone de Contato -->
+        <mat-form-field appearance="outline">
+          <mat-label>Telefone de Contato</mat-label>
+          <input matInput formControlName="telefoneContato" required>
+          <!-- Adicionar máscara se a lib for instalada -->
+          <!-- <input matInput formControlName="telefoneContato" required mask="(00) 00000-0000||(00) 0000-0000"> -->
+          <mat-error *ngIf="salesForm.get('telefoneContato')?.hasError('required')">
+            Telefone é obrigatório.
+          </mat-error>
+        </mat-form-field>
+
+        <!-- Ticket -->
+        <mat-form-field appearance="outline">
+          <mat-label>Ticket</mat-label>
+          <input matInput formControlName="ticket" required>
+          <mat-error *ngIf="salesForm.get('ticket')?.hasError('required')">
+            Ticket é obrigatório.
+          </mat-error>
+        </mat-form-field>
+
+         <!-- Tipo de Venda -->
+        <mat-form-field appearance="outline">
+          <mat-label>Tipo de Venda</mat-label>
+          <mat-select formControlName="tipoVenda" required>
+            <mat-option *ngFor="let tipo of tipoVendaOptions" [value]="tipo">
+              {{ tipo }}
+            </mat-option>
+          </mat-select>
+           <mat-error *ngIf="salesForm.get('tipoVenda')?.hasError('required')">
+            Tipo de Venda é obrigatório.
+          </mat-error>
+        </mat-form-field>
+
+        <!-- Velocidade -->
+        <mat-form-field appearance="outline">
+          <mat-label>Velocidade Contratada</mat-label>
+          <mat-select formControlName="velocidade" required>
+            <mat-option *ngFor="let vel of velocidadeOptions" [value]="vel">
+              {{ vel }}
+            </mat-option>
+          </mat-select>
+          <mat-error *ngIf="salesForm.get('velocidade')?.hasError('required')">
+            Velocidade é obrigatória.
+          </mat-error>
+        </mat-form-field>
+
+        <!-- OS (Opcional) -->
+        <mat-form-field appearance="outline">
+          <mat-label>OS (Opcional)</mat-label>
+          <input matInput formControlName="os">
+        </mat-form-field>
+
+      </div>
+
+      <!-- Coluna 2 -->
+      <div class="form-column">
+        <!-- Status (padrão Em Aprovisionamento) -->
+        <mat-form-field appearance="outline">
+          <mat-label>Status Inicial</mat-label>
+          <mat-select formControlName="status" required>
+            <mat-option *ngFor="let s of statusOptions" [value]="s">
+              {{ s }}
+            </mat-option>
+          </mat-select>
+           <mat-error *ngIf="salesForm.get('status')?.hasError('required')">
+            Status é obrigatório.
+          </mat-error>
+        </mat-form-field>
+
+        <!-- Data da Venda -->
+        <mat-form-field appearance="outline">
+          <mat-label>Data da Venda</mat-label>
+          <input matInput [matDatepicker]="pickerVenda" formControlName="dataVenda" required readonly>
+          <mat-datepicker-toggle matSuffix [for]="pickerVenda"></mat-datepicker-toggle>
+          <mat-datepicker #pickerVenda></mat-datepicker>
+          <mat-error *ngIf="salesForm.get('dataVenda')?.hasError('required')">
+            Data da Venda é obrigatória.
+          </mat-error>
+        </mat-form-field>
+
+        <!-- Data da Instalação (Opcional) -->
+        <mat-form-field appearance="outline">
+          <mat-label>Data da Instalação (Opcional)</mat-label>
+          <input matInput [matDatepicker]="pickerInstalacao" formControlName="dataInstalacao" readonly>
+          <mat-datepicker-toggle matSuffix [for]="pickerInstalacao"></mat-datepicker-toggle>
+          <mat-datepicker #pickerInstalacao></mat-datepicker>
+        </mat-form-field>
+
+        <!-- Período (Opcional) -->
+        <mat-form-field appearance="outline">
+          <mat-label>Período Instalação (Opcional)</mat-label>
+          <mat-select formControlName="periodo">
+             <mat-option [value]="null">Nenhum</mat-option>
+            <mat-option *ngFor="let p of periodoOptions" [value]="p">
+              {{ p }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <!-- Pagamento -->
+        <mat-form-field appearance="outline">
+          <mat-label>Forma de Pagamento</mat-label>
+          <mat-select formControlName="pagamento" required>
+            <mat-option *ngFor="let pag of pagamentoOptions" [value]="pag">
+              {{ pag }}
+            </mat-option>
+          </mat-select>
+          <mat-error *ngIf="salesForm.get('pagamento')?.hasError('required')">
+            Pagamento é obrigatório.
+          </mat-error>
+        </mat-form-field>
+
+        <!-- UF -->
+        <mat-form-field appearance="outline">
+          <mat-label>UF</mat-label>
+          <mat-select formControlName="uf" required>
+            <mat-option *ngFor="let uf of ufs" [value]="uf">
+              {{ uf }}
+            </mat-option>
+          </mat-select>
+          <mat-error *ngIf="salesForm.get('uf')?.hasError('required')">
+            UF é obrigatória.
+          </mat-error>
+        </mat-form-field>
+      </div>
+    </div>
+
+    <!-- Observação (Opcional) -->
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Observação (Opcional)</mat-label>
+      <textarea matInput formControlName="observacao" rows="3"></textarea>
+    </mat-form-field>
+
+    <!-- Botão de Cadastro e Spinner -->
+    <div class="button-container">
+      <button mat-raised-button color="primary" type="submit" [disabled]="salesForm.invalid || isLoading">
+        <span *ngIf="!isLoading">Cadastrar Venda</span>
+        <mat-spinner *ngIf="isLoading" diameter="24"></mat-spinner>
+      </button>
+    </div>
+  </form>
+</div>
+

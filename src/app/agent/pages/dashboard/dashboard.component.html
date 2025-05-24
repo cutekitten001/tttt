@@ -1,0 +1,35 @@
+<mat-toolbar color="primary">
+  <span>Painel Agente - TLV BOV</span>
+  <span class="user-greeting">Olá, {{ userName$ | async }}</span>
+  <span class="spacer"></span>
+  <button mat-icon-button (click)="logout()" matTooltip="Sair">
+    <mat-icon>logout</mat-icon>
+  </button>
+</mat-toolbar>
+
+<div class="dashboard-container">
+  <mat-tab-group animationDuration="0ms">
+    <!-- Aba de Cadastro de Venda -->
+    <mat-tab label="Cadastrar Nova Venda">
+      <ng-template matTabContent>
+        <mat-card>
+          <mat-card-content>
+            <app-sales-form></app-sales-form>
+          </mat-card-content>
+        </mat-card>
+      </ng-template>
+    </mat-tab>
+
+    <!-- Aba de Minhas Vendas -->
+    <mat-tab label="Minhas Vendas">
+      <ng-template matTabContent>
+         <mat-card>
+          <mat-card-content>
+            <app-my-sales-list></app-my-sales-list>
+          </mat-card-content>
+        </mat-card>
+      </ng-template>
+    </mat-tab>
+  </mat-tab-group>
+</div>
+

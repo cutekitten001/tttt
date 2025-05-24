@@ -1,0 +1,89 @@
+<div class="my-sales-list-container">
+  <h3>Minhas Vendas Registradas</h3>
+
+  <!-- Tabela de Vendas do Agente -->
+  <div class="table-container mat-elevation-z8">
+    <ng-container *ngIf="(mySales$ | async) as mySales">
+      <table mat-table [dataSource]="mySales">
+
+        <!-- Coluna Ticket -->
+        <ng-container matColumnDef="ticket">
+          <th mat-header-cell *matHeaderCellDef> Ticket </th>
+          <td mat-cell *matCellDef="let venda"> {{venda.ticket}} </td>
+        </ng-container>
+
+        <!-- Coluna CPF/CNPJ -->
+        <ng-container matColumnDef="cpfCnpj">
+          <th mat-header-cell *matHeaderCellDef> CPF/CNPJ Cliente </th>
+          <td mat-cell *matCellDef="let venda"> {{venda.cpfCnpj}} </td> <!-- Adicionar máscara se necessário -->
+        </ng-container>
+
+        <!-- Coluna Data da Venda -->
+        <ng-container matColumnDef="dataVenda">
+          <th mat-header-cell *matHeaderCellDef> Data Venda </th>
+          <td mat-cell *matCellDef="let venda"> {{venda.dataVenda.toDate() | date:'dd/MM/yyyy'}} </td>
+        </ng-container>
+
+        <!-- Coluna Tipo de Venda -->
+        <ng-container matColumnDef="tipoVenda">
+          <th mat-header-cell *matHeaderCellDef> Tipo </th>
+          <td mat-cell *matCellDef="let venda"> {{venda.tipoVenda}} </td>
+        </ng-container>
+
+        <!-- Coluna Velocidade -->
+        <ng-container matColumnDef="velocidade">
+          <th mat-header-cell *matHeaderCellDef> Velocidade </th>
+          <td mat-cell *matCellDef="let venda"> {{venda.velocidade}} </td>
+        </ng-container>
+
+        <!-- Coluna Status -->
+        <ng-container matColumnDef="status">
+          <th mat-header-cell *matHeaderCellDef> Status </th>
+          <td mat-cell *matCellDef="let venda">
+            <span [ngClass]="{
+              'status-aprovisionamento': venda.status === 'Em Aprovisionamento',
+              'status-pendencia': venda.status === 'Pendência',
+              'status-instalada': venda.status === 'Instalada',
+              'status-cancelada': venda.status === 'Cancelada'
+            }">
+              {{ venda.status }}
+            </span>
+          </td>
+        </ng-container>
+
+        <!-- Coluna Data da Instalação -->
+        <ng-container matColumnDef="dataInstalacao">
+          <th mat-header-cell *matHeaderCellDef> Data Instalação </th>
+          <td mat-cell *matCellDef="let venda">
+            {{ venda.dataInstalacao ? (venda.dataInstalacao.toDate() | date:'dd/MM/yyyy') : '-' }}
+          </td>
+        </ng-container>
+
+        <!-- Coluna Observação -->
+        <ng-container matColumnDef="observacao">
+          <th mat-header-cell *matHeaderCellDef> Observação </th>
+          <td mat-cell *matCellDef="let venda" [matTooltip]="venda.observacao || ''" class="obs-cell">
+            {{ (venda.observacao && venda.observacao.length > 50) ? (venda.observacao | slice:0:50) + '...' :
+            (venda.observacao || '-') }}
+          </td>
+        </ng-container>
+
+        <!-- Definição das Linhas -->
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+        <!-- Mensagem caso não haja dados -->
+        <tr class="mat-row" *matNoDataRow>
+          <td class="mat-cell" [attr.colspan]="displayedColumns.length">
+            Você ainda não cadastrou nenhuma venda ou elas estão carregando...
+          </td>
+        </tr>
+      </table>
+    </ng-container>
+  </div>
+
+  <!-- Indicador de Carregamento Geral (Opcional) -->
+  <div *ngIf="!(mySales$ | async)" class="loading-shade">
+    <mat-spinner></mat-spinner>
+  </div>
+</div>

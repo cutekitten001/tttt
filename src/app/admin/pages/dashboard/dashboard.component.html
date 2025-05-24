@@ -1,0 +1,34 @@
+<mat-toolbar color="primary">
+  <span>Painel Admin - TLV BOV</span>
+  <span class="spacer"></span>
+  <button mat-icon-button (click)="logout()" matTooltip="Sair">
+    <mat-icon>logout</mat-icon>
+  </button>
+</mat-toolbar>
+
+<div class="dashboard-container">
+  <mat-tab-group animationDuration="0ms">
+    <!-- Aba de Gerenciamento de Agentes -->
+    <mat-tab label="Gerenciar Agentes">
+      <ng-template matTabContent>
+        <mat-card>
+          <mat-card-content>
+            <app-agent-list></app-agent-list>
+          </mat-card-content>
+        </mat-card>
+      </ng-template>
+    </mat-tab>
+
+    <!-- Aba de Visualização de Vendas -->
+    <mat-tab label="Visualizar Vendas">
+      <ng-template matTabContent>
+         <mat-card>
+          <mat-card-content>
+            <app-sales-list></app-sales-list>
+          </mat-card-content>
+        </mat-card>
+      </ng-template>
+    </mat-tab>
+  </mat-tab-group>
+</div>
+
