@@ -1,5 +1,11 @@
 @use '@angular/material' as mat;
 
+:host {
+  --mat-sys-success: #4caf50;
+  --mat-sys-success-channel: 76, 175, 80;
+  --mat-sys-warning: #ff9800;
+  --mat-sys-warning-channel: 255, 152, 0;
+}
 // Configuração do tema dark
 html {
   color-scheme: light dark;

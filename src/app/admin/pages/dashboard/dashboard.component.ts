@@ -1,36 +1,43 @@
-// Importações do Angular e Componentes Filhos
-import { Component } from '@angular/core';
-import { AgentListComponent } from '../../components/agent-list/agent-list.component';
-import { SalesListComponent } from '../../components/sales-list/sales-list.component';
-import { MatTabsModule } from '@angular/material/tabs'; // Para organizar as seções
-import { MatCardModule } from '@angular/material/card';
-import { CommonModule } from '@angular/common';
-import { AuthService } from '../../../core/services/auth.service'; // Para logout
-import { inject } from '@angular/core'; // Para injeção
+import { Component, inject } from '@angular/core';
+import { CommonModule, DatePipe } from '@angular/common';
+import { AuthService } from '../../../core/services/auth.service';
 import { MatButtonModule } from '@angular/material/button';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatIconModule } from '@angular/material/icon';
-
+import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatListModule } from '@angular/material/list';
+import { MatCardModule } from '@angular/material/card';
+import { RouterModule } from '@angular/router';
+import { AgentListComponent } from '../../components/agent-list/agent-list.component';
+import { SalesListComponent } from '../../components/sales-list/sales-list.component';
 @Component({
-  selector: 'app-dashboard',
+  selector: 'app-admin-dashboard',
   standalone: true,
   imports: [
     CommonModule,
-    AgentListComponent, // Importa o componente de lista de agentes
-    SalesListComponent, // Importa o componente de lista de vendas
-    MatTabsModule,
-    MatCardModule,
     MatButtonModule,
     MatToolbarModule,
-    MatIconModule
+    MatIconModule,
+    MatSidenavModule,
+    MatListModule,
+    MatCardModule,
+    RouterModule,
+    DatePipe,
+    AgentListComponent,
+    SalesListComponent
   ],
   templateUrl: './dashboard.component.html',
-  styleUrl: './dashboard.component.scss'
+  styleUrls: ['./dashboard.component.scss']
 })
 export class DashboardComponent {
   // Injeta o serviço de autenticação para usar o logout
   private authService: AuthService = inject(AuthService);
 
+  // Dados para exibição (substitua por dados reais do seu serviço)
+  currentDate: Date = new Date();
+  agentCount: number = 42;
+  salesCount: number = 128;
+  approvalsCount: number = 37;
   // Função para realizar logout
   logout(): void {
     this.authService.logout();

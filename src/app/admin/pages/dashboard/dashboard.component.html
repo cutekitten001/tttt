@@ -1,34 +1,108 @@
-<mat-toolbar color="primary">
-  <span>Painel Admin - TLV BOV</span>
-  <span class="spacer"></span>
-  <button mat-icon-button (click)="logout()" matTooltip="Sair">
-    <mat-icon>logout</mat-icon>
-  </button>
-</mat-toolbar>
+<div class="admin-dashboard">
+  <!-- Sidebar -->
+  <mat-sidenav-container class="sidenav-container">
+    <mat-sidenav #sidenav mode="side" opened class="sidenav">
+      <div class="sidenav-header">
+        <h2>TLV BOV</h2>
+        <p>Admin Panel</p>
+      </div>
+      
+      <mat-nav-list>
+        <a mat-list-item routerLink="/admin/dashboard" routerLinkActive="active">
+          <mat-icon>dashboard</mat-icon>
+          <span>Dashboard</span>
+        </a>
+        <a mat-list-item routerLink="/admin/agents" routerLinkActive="active">
+          <mat-icon>people</mat-icon>
+          <span>Gerenciar Agentes</span>
+        </a>
+        <a mat-list-item routerLink="/admin/sales" routerLinkActive="active">
+          <mat-icon>shopping_cart</mat-icon>
+          <span>Visualizar Vendas</span>
+        </a>
+        <a mat-list-item routerLink="/admin/account" routerLinkActive="active">
+          <mat-icon>account_circle</mat-icon>
+          <span>Minha Conta</span>
+        </a>
+      </mat-nav-list>
+    </mat-sidenav>
 
-<div class="dashboard-container">
-  <mat-tab-group animationDuration="0ms">
-    <!-- Aba de Gerenciamento de Agentes -->
-    <mat-tab label="Gerenciar Agentes">
-      <ng-template matTabContent>
-        <mat-card>
+    <!-- Main Content -->
+    <mat-sidenav-content class="content">
+      <mat-toolbar color="primary" class="toolbar">
+        <button mat-icon-button (click)="sidenav.toggle()">
+          <mat-icon>menu</mat-icon>
+        </button>
+        
+        <span class="spacer"></span>
+        
+        <div class="user-info">
+          <span>Bem-vindo, Admin</span>
+          <mat-icon>notifications</mat-icon>
+          <button mat-icon-button (click)="logout()" matTooltip="Sair">
+            <mat-icon>logout</mat-icon>
+          </button>
+        </div>
+      </mat-toolbar>
+
+      <div class="dashboard-content">
+        <!-- Welcome Card -->
+        <mat-card class="welcome-card">
           <mat-card-content>
-            <app-agent-list></app-agent-list>
+            <div class="welcome-content">
+              <div>
+                <h1>Bem-vindo de volta, Admin</h1>
+                <p>{{ currentDate | date:'fullDate' }}</p>
+              </div>
+              <div class="stats-icon">
+                <mat-icon>trending_up</mat-icon>
+              </div>
+            </div>
           </mat-card-content>
         </mat-card>
-      </ng-template>
-    </mat-tab>
 
-    <!-- Aba de Visualização de Vendas -->
-    <mat-tab label="Visualizar Vendas">
-      <ng-template matTabContent>
-         <mat-card>
-          <mat-card-content>
-            <app-sales-list></app-sales-list>
-          </mat-card-content>
-        </mat-card>
-      </ng-template>
-    </mat-tab>
-  </mat-tab-group>
+        <!-- Stats Cards -->
+        <div class="stats-grid">
+          <mat-card class="stat-card">
+            <mat-card-content>
+              <mat-icon>people</mat-icon>
+              <h3>Agentes</h3>
+              <p class="stat-value">{{ agentCount }}</p>
+              <p class="stat-change positive">
+                <mat-icon>arrow_upward</mat-icon>
+                +12% este mês
+              </p>
+            </mat-card-content>
+          </mat-card>
+
+          <mat-card class="stat-card">
+            <mat-card-content>
+              <mat-icon>shopping_cart</mat-icon>
+              <h3>Vendas</h3>
+              <p class="stat-value">{{ salesCount }}</p>
+              <p class="stat-change positive">
+                <mat-icon>arrow_upward</mat-icon>
+                +8% este mês
+              </p>
+            </mat-card-content>
+          </mat-card>
+
+          <mat-card class="stat-card">
+            <mat-card-content>
+              <mat-icon>check_circle</mat-icon>
+              <h3>Aprovações</h3>
+              <p class="stat-value">{{ approvalsCount }}</p>
+              <p class="stat-change negative">
+                <mat-icon>arrow_downward</mat-icon>
+                -3% este mês
+              </p>
+            </mat-card-content>
+          </mat-card>
+        </div>
+
+        <!-- Router Outlet for dynamic content -->
+        <router-outlet></router-outlet>
+      </div>
+    </mat-sidenav-content>
+  </mat-sidenav-container>
 </div>
-
